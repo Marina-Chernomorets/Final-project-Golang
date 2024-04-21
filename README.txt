@@ -33,3 +33,24 @@
 5. После запуска приложения вы можете выполнить тестирование API, добавив выражение "2 + 2" с помощью функции testAPI(). Вам будет выведена информация о добавленном выражении и полученном списке всех выражений.
 
 6. Теперь вы можете отправлять запросы к вашему API через HTTP-запросы на http://localhost:8080/add для добавления новых выражений, http://localhost:8080/expressions для получения списка всех выражений и http://localhost:8080/expression?id=ID для получения информации о конкретном выражении по его ID.
+Пример функции testAPI():
+func testAPI() {
+ resp, err := http.PostForm("http://localhost:8080/add", url.Values{"expression": {"2 + 2"}})
+ if err != nil {
+  fmt.Println("Error adding expression:", err)
+  return
+ }
+ defer resp.Body.Close()
+ body, _ := ioutil.ReadAll(resp.Body)
+ fmt.Println("Add expression response:", string(body))
+
+ // Получение списка всех выражений
+ resp, err = http.Get("http://localhost:8080/expressions")
+ if err != nil {
+  fmt.Println("Error getting expressions:", err)
+  return
+ }
+ defer resp.Body.Close()
+ body, _ = ioutil.ReadAll(resp.Body)
+ fmt.Println("Get expressions response:", string(body))
+}
