@@ -1,0 +1,25 @@
+package main
+
+import (
+    "testing"
+)
+
+func TestCalculateExpression(t *testing.T) {
+    testCases := []struct {
+        expression string
+        expected   int
+    }{
+        {"2+3-1", 4},
+        {"4*5", 20},
+        {"10/2", 5},
+        {"7+3*2", 13},
+        // Добавь больше тестовых случаев здесь
+    }
+
+    for _, tc := range testCases {
+        result := calculateExpression(tc.expression)
+        if result != tc.expected {
+            t.Errorf("Expected result for expression '%s' is %d, but got %d", tc.expression, tc.expected, result)
+        }
+    }
+}
