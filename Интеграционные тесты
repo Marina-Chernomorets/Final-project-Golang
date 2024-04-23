@@ -1,0 +1,52 @@
+package main
+
+import (
+    "net/http"
+    "net/http/httptest"
+    "testing"
+)
+
+func TestGetExpressionsHandler(t *testing.T) {
+    req, err := http.NewRequest("GET", "/expressions", nil)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(getExpressionsHandler)
+    handler.ServeHTTP(rr, req)
+
+    if status := rr.Code; status != http.StatusOK {
+        t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+    }
+}
+
+func TestGetExpressionByIDHandler(t *testing.T) {
+    req, err := http.NewRequest("GET", "/expression?id=123", nil)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(getExpressionByIDHandler)
+    handler.ServeHTTP(rr, req)
+
+    if status := rr.Code; status != http.StatusOK {
+        t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusOK)
+    }
+}
+
+func TestGetExpressionByIDHandlerNotFound(t *testing.T) {
+    req, err := http.NewRequest("GET", "/expression?id=invalid-id", nil)
+    if err != nil {
+        t.Fatal(err)
+    }
+
+    rr := httptest.NewRecorder()
+    handler := http.HandlerFunc(getExpressionByIDHandler)
+    handler.ServeHTTP(rr, req)
+
+    if status := rr.Code; status != http.StatusNotFound {
+        t.Errorf("handler returned wrong status code: got %v want %v", status, http.StatusNotFound)
+    }
+}
